@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HospitalDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Diagnosis">
+    <Key>
+      <PropertyRef Name="PatientId" />
+    </Key>
+    <Property Name="PatientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PatientName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Sexual" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="IdNumber" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Symptoms" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Advice" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="DocterID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="PrintDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="MRN" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+    <NavigationProperty Name="Employee1" Relationship="HospitalDBModel.FK_Diagnosis_ToTable1" FromRole="Diagnosis" ToRole="Employee" />
+    <NavigationProperty Name="Prescriptions" Relationship="HospitalDBModel.FK_Prescriptions_ToPatient" FromRole="Diagnosis" ToRole="Prescription" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeId" />
+    </Key>
+    <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Account" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="Binary" MaxLength="32" FixedLength="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Sexual" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Occupation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="PhysicianID" Type="String" MaxLength="7" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Diagnosis1" Relationship="HospitalDBModel.FK_Diagnosis_ToTable1" FromRole="Employee" ToRole="Diagnosis" />
+    <NavigationProperty Name="Messageboards" Relationship="HospitalDBModel.FK_Messageboard_ToTable" FromRole="Employee" ToRole="Messageboard" />
+    <NavigationProperty Name="Issues" Relationship="HospitalDBModel.FK_Issue_ToEmployee" FromRole="Employee" ToRole="Issue" />
+    <NavigationProperty Name="Prescriptions" Relationship="HospitalDBModel.FK_Prescriptions_ToEmployee" FromRole="Employee" ToRole="Prescription" />
+  </EntityType>
+  <EntityContainer Name="HospitalDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Diagnosis1" EntityType="HospitalDBModel.Diagnosis" />
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <FunctionImport Name="AccountExistCheck">
+      <Parameter Name="Account" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="LoginProcedure">
+      <Parameter Name="Account" Mode="In" Type="String" />
+      <Parameter Name="Password" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="SignInProcedure">
+      <Parameter Name="Username" Mode="In" Type="String" />
+      <Parameter Name="Password" Mode="In" Type="Binary" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="Birthday" Mode="In" Type="DateTime" />
+      <Parameter Name="Sexual" Mode="In" Type="String" />
+      <Parameter Name="Email" Mode="In" Type="String" />
+      <Parameter Name="Occupation" Mode="In" Type="String" />
+      <Parameter Name="Department" Mode="In" Type="String" />
+      <Parameter Name="Picture" Mode="In" Type="Binary" />
+      <Parameter Name="PhysicianID" Mode="In" Type="String" />
+    </FunctionImport>
+    <AssociationSet Name="FK_Diagnosis_ToTable1" Association="HospitalDBModel.FK_Diagnosis_ToTable1">
+      <End EntitySet="Employees" Role="Employee" />
+      <End EntitySet="Diagnosis1" Role="Diagnosis" />
+    </AssociationSet>
+    <EntitySet Name="Messageboards" EntityType="HospitalDBModel.Messageboard" />
+    <AssociationSet Name="FK_Messageboard_ToTable" Association="HospitalDBModel.FK_Messageboard_ToTable">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Messageboard" EntitySet="Messageboards" />
+    </AssociationSet>
+    <EntitySet Name="Issues" EntityType="HospitalDBModel.Issue" />
+    <AssociationSet Name="FK_Issue_ToEmployee" Association="HospitalDBModel.FK_Issue_ToEmployee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Issue" EntitySet="Issues" />
+    </AssociationSet>
+    <EntitySet Name="Pills" EntityType="HospitalDBModel.Pill" />
+    <EntitySet Name="Prescriptions" EntityType="HospitalDBModel.Prescription" />
+    <AssociationSet Name="FK_Prescriptions_ToEmployee" Association="HospitalDBModel.FK_Prescriptions_ToEmployee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Prescription" EntitySet="Prescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Prescriptions_ToPills" Association="HospitalDBModel.FK_Prescriptions_ToPills">
+      <End Role="Pill" EntitySet="Pills" />
+      <End Role="Prescription" EntitySet="Prescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Prescriptions_ToPatient" Association="HospitalDBModel.FK_Prescriptions_ToPatient">
+      <End Role="Diagnosis" EntitySet="Diagnosis1" />
+      <End Role="Prescription" EntitySet="Prescriptions" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_Diagnosis_ToTable1">
+    <End Type="HospitalDBModel.Employee" Multiplicity="1" Role="Employee" />
+    <End Type="HospitalDBModel.Diagnosis" Multiplicity="*" Role="Diagnosis" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Diagnosis">
+        <PropertyRef Name="DocterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Messageboard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employee" Relationship="HospitalDBModel.FK_Messageboard_ToTable" FromRole="Messageboard" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FK_Messageboard_ToTable">
+    <End Type="HospitalDBModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="HospitalDBModel.Messageboard" Role="Messageboard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Messageboard">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Issue">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="HospitalDBModel.FK_Issue_ToEmployee" FromRole="Issue" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FK_Issue_ToEmployee">
+    <End Type="HospitalDBModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="HospitalDBModel.Issue" Role="Issue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Issue">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Pill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PillName" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+    <Property Name="PillInstore" Type="Int32" Nullable="false" />
+    <Property Name="PillUnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="BuyDate" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Prescriptions" Relationship="HospitalDBModel.FK_Prescriptions_ToPills" FromRole="Pill" ToRole="Prescription" />
+    <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prescription">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <Property Name="PillsID" Type="Int32" Nullable="false" />
+    <Property Name="Count" Type="Int32" Nullable="false" />
+    <Property Name="TotalPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <NavigationProperty Name="Employee" Relationship="HospitalDBModel.FK_Prescriptions_ToEmployee" FromRole="Prescription" ToRole="Employee" />
+    <NavigationProperty Name="Pill" Relationship="HospitalDBModel.FK_Prescriptions_ToPills" FromRole="Prescription" ToRole="Pill" />
+    <Property Name="PatientID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Diagnosi" Relationship="HospitalDBModel.FK_Prescriptions_ToPatient" FromRole="Prescription" ToRole="Diagnosis" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="FK_Prescriptions_ToEmployee">
+    <End Type="HospitalDBModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="HospitalDBModel.Prescription" Role="Prescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Prescription">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Prescriptions_ToPills">
+    <End Type="HospitalDBModel.Pill" Role="Pill" Multiplicity="1" />
+    <End Type="HospitalDBModel.Prescription" Role="Prescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pill">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Prescription">
+        <PropertyRef Name="PillsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Prescriptions_ToPatient">
+    <End Type="HospitalDBModel.Diagnosis" Role="Diagnosis" Multiplicity="1" />
+    <End Type="HospitalDBModel.Prescription" Role="Prescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Diagnosis">
+        <PropertyRef Name="PatientId" />
+      </Principal>
+      <Dependent Role="Prescription">
+        <PropertyRef Name="PatientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

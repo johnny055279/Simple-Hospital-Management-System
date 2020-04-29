@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HospitalDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Diagnosis">
+    <Key>
+      <PropertyRef Name="PatientId" />
+    </Key>
+    <Property Name="PatientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PatientName" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="Sexual" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="MRN" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="IdNumber" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="Birthday" Type="date" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" />
+    <Property Name="Symptoms" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Advice" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Picture" Type="varbinary(max)" Nullable="false" />
+    <Property Name="DocterID" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="date" Nullable="false" />
+    <Property Name="PrintDate" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeId" />
+    </Key>
+    <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Account" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="Password" Type="varbinary" MaxLength="32" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="Birthday" Type="date" Nullable="false" />
+    <Property Name="Sexual" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Occupation" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Department" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Picture" Type="varbinary(max)" Nullable="false" />
+    <Property Name="PhysicianID" Type="nvarchar" MaxLength="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Issue">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Content" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+    <Property Name="EmployeeID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Messageboard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeId" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pills">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PillName" Type="nchar" MaxLength="30" Nullable="false" />
+    <Property Name="PillInstore" Type="int" Nullable="false" />
+    <Property Name="PillUnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="BuyDate" Type="date" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prescriptions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeID" Type="int" Nullable="false" />
+    <Property Name="PillsID" Type="int" Nullable="false" />
+    <Property Name="Count" Type="int" Nullable="false" />
+    <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PatientID" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="date" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Diagnosis_ToTable">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Diagnosis" Type="Self.Diagnosis" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Diagnosis">
+        <PropertyRef Name="DocterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Issue_ToEmployee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Issue" Type="Self.Issue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Issue">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Messageboard_ToTable">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Messageboard" Type="Self.Messageboard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Messageboard">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Prescriptions_ToEmployee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Prescriptions" Type="Self.Prescriptions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Prescriptions">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Prescriptions_ToPatient">
+    <End Role="Diagnosis" Type="Self.Diagnosis" Multiplicity="1" />
+    <End Role="Prescriptions" Type="Self.Prescriptions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Diagnosis">
+        <PropertyRef Name="PatientId" />
+      </Principal>
+      <Dependent Role="Prescriptions">
+        <PropertyRef Name="PatientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Prescriptions_ToPills">
+    <End Role="Pills" Type="Self.Pills" Multiplicity="1" />
+    <End Role="Prescriptions" Type="Self.Prescriptions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pills">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Prescriptions">
+        <PropertyRef Name="PillsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="AccountExistCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Account" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="LoginProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Account" Type="nvarchar" Mode="In" />
+    <Parameter Name="Password" Type="varbinary" Mode="In" />
+  </Function>
+  <Function Name="SignInProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Username" Type="nvarchar" Mode="In" />
+    <Parameter Name="Password" Type="varbinary(max)" Mode="In" />
+    <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+    <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Birthday" Type="date" Mode="In" />
+    <Parameter Name="Sexual" Type="nvarchar" Mode="In" />
+    <Parameter Name="Email" Type="nvarchar" Mode="In" />
+    <Parameter Name="Occupation" Type="nvarchar" Mode="In" />
+    <Parameter Name="Department" Type="nvarchar" Mode="In" />
+    <Parameter Name="Picture" Type="varbinary(max)" Mode="In" />
+    <Parameter Name="PhysicianID" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="HospitalDBModelStoreContainer">
+    <EntitySet Name="Diagnosis" EntityType="Self.Diagnosis" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Issue" EntityType="Self.Issue" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Messageboard" EntityType="Self.Messageboard" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pills" EntityType="Self.Pills" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Prescriptions" EntityType="Self.Prescriptions" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Diagnosis_ToTable" Association="Self.FK_Diagnosis_ToTable">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Diagnosis" EntitySet="Diagnosis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Issue_ToEmployee" Association="Self.FK_Issue_ToEmployee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Issue" EntitySet="Issue" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Messageboard_ToTable" Association="Self.FK_Messageboard_ToTable">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Messageboard" EntitySet="Messageboard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Prescriptions_ToEmployee" Association="Self.FK_Prescriptions_ToEmployee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Prescriptions" EntitySet="Prescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Prescriptions_ToPatient" Association="Self.FK_Prescriptions_ToPatient">
+      <End Role="Diagnosis" EntitySet="Diagnosis" />
+      <End Role="Prescriptions" EntitySet="Prescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Prescriptions_ToPills" Association="Self.FK_Prescriptions_ToPills">
+      <End Role="Pills" EntitySet="Pills" />
+      <End Role="Prescriptions" EntitySet="Prescriptions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
